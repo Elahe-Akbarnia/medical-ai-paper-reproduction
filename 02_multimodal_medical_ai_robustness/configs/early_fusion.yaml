@@ -1,1 +1,34 @@
+experiment:
 
+  name: VisionBERT_EarlyFusion
+
+
+fusion:
+
+  method: early
+
+
+architecture:
+
+  image_feature_dim: 2048
+
+  text_feature_dim: 768
+
+
+  fusion_dim: 4864
+
+
+classifier:
+
+  hidden_dim: 512
+
+  output_dim: 1
+
+
+training:
+
+  epochs: 5
+
+  optimizer: Adam
+
+  learning_rate: 0.0001
