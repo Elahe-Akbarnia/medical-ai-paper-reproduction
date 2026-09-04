@@ -1,0 +1,59 @@
+message: "If you use this repository in your research, please cite it using the metadata below."
+
+title: "Assessing the Adversarial Robustness of Multimodal Medical AI Systems: Implementation"
+
+type: software
+
+authors:
+  - family-names: "Akbarnia"
+    given-names: "Elahe"
+    email: "elahe.akbarnia.edu@gmail.com"
+
+abstract: >
+  This repository provides an implementation of a multimodal adversarial
+  robustness framework for medical AI systems. The implementation includes
+  SE-ResNet-154 chest X-ray classification, Bio_ClinicalBERT clinical text
+  classification, multimodal fusion strategies, image-based adversarial attacks
+  using FGSM and PGD, text adversarial attacks, and robustness evaluation.
+
+keywords:
+  - "medical AI"
+  - "medical imaging"
+  - "chest X-ray classification"
+  - "multimodal learning"
+  - "adversarial attacks"
+  - "FGSM"
+  - "PGD"
+  - "BioClinicalBERT"
+  - "SE-ResNet-154"
+  - "deep learning"
+  - "adversarial robustness"
+
+version: "1.0.0"
+
+date-released: "2026-09-04"
+
+license: "MIT"
+
+repository-code: "https://github.com/Elahe-Akbarnia/medical-ai-paper-reproduction"
+
+url: "https://github.com/Elahe-Akbarnia/medical-ai-paper-reproduction/tree/main/02_multimodal_medical_ai_robustness"
+
+preferred-citation:
+  type: article
+  title: "Assessing the adversarial robustness of multimodal medical AI systems: insights into vulnerabilities and modality interactions"
+  authors:
+    - family-names: "Mozhegova"
+      given-names: "Ekaterina"
+    - family-names: "Khattak"
+      given-names: "Asad Masood"
+    - family-names: "Khan"
+      given-names: "Adil"
+    - family-names: "Garaev"
+      given-names: "Roman"
+    - family-names: "Rasheed"
+      given-names: "Bader"
+    - family-names: "Anwar"
+      given-names: "Muhammad Shahid"
+  journal: "Frontiers in Medicine"
+  year: 2025
