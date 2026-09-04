@@ -1,1 +1,30 @@
+experiment:
 
+  name: clinicalbert_classifier
+
+  seed: 42
+
+
+data:
+
+  max_length: 256
+
+
+model:
+
+  architecture: Bio_ClinicalBERT
+
+  pretrained: true
+
+  num_classes: 1
+
+
+training:
+
+  epochs: 5
+
+  batch_size: 32
+
+  optimizer: Adam
+
+  learning_rate: 0.00002
