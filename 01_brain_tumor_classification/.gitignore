@@ -1,1 +1,8 @@
-logs/
+# Dataset
+data/raw/
+
+# Generated processed data
+data/processed/
+
+# Dataset split files (if generated)
+data/splits/
