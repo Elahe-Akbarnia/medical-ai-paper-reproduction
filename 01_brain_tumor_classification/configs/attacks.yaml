@@ -1,0 +1,49 @@
+fgsm:
+
+  epsilon_baseline: 0.01
+
+  epsilon_simulation_1: 0.05
+
+  epsilon_simulation_2: 0.01
+
+
+
+pgd:
+
+  epsilon_baseline: 0.01
+
+  alpha_baseline: 0.002
+
+  iterations_baseline: 10
+
+
+  simulation_1:
+
+    epsilon: 0.05
+
+    alpha: 0.04
+
+    iterations: 10
+
+
+  simulation_2:
+
+    epsilon: 0.01
+
+    alpha: 0.002
+
+    iterations: 10
+
+
+
+feature_squeezing:
+
+  bit_depth: 4
+
+  gaussian_kernel:
+
+    height: 3
+
+    width: 3
+
+  sigma: 1.0
