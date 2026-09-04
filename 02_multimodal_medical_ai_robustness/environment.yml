@@ -1,1 +1,35 @@
+name: multimodal-medical-robustness
 
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+
+dependencies:
+
+  - python=3.10
+
+  - pytorch=2.2.2
+  - torchvision=0.17.2
+  - pytorch-cuda=12.1
+
+  - numpy
+  - pandas
+  - scikit-learn
+
+  - pillow
+  - opencv
+
+  - matplotlib
+  - seaborn
+
+  - pyyaml
+  - tqdm
+
+  - pip
+
+  - pip:
+      - transformers==4.40.1
+      - timm==0.9.16
+      - tensorboard
+      - textattack
