@@ -1,6 +1,6 @@
 # A Multi-Layered Defense Against Adversarial Attacks in Brain Tumor Classification
 
-Official implementation of:
+Implementation of:
 
 "A multi-layered defense against adversarial attacks in brain tumor classification using ensemble adversarial training and feature squeezing"
 
