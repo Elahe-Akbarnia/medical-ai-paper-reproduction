@@ -1,0 +1,25 @@
+baseline_training:
+
+  frozen_epochs: 5
+
+  finetune_epochs: 10
+
+
+  batch_size: 32
+
+
+
+adversarial_training:
+
+  epochs: 10
+
+  batch_size: 32
+
+
+  dataset_ratio:
+
+    clean: 0.33
+
+    fgsm: 0.33
+
+    pgd: 0.33
