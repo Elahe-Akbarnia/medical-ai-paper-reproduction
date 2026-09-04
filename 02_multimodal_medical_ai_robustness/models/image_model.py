@@ -1,4 +1,6 @@
-# SE-ResNet-154 based chest X-ray classifier.
+# SE-ResNet based chest X-ray classifier.
+#Implementation note:
+#The original paper uses SE-ResNet154. Due to unavailable pretrained checkpoints, this implementation uses SE-ResNet152d from timm with ImageNet initialization.
 
 import torch
 import torch.nn as nn
