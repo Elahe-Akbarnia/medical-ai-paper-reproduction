@@ -55,3 +55,59 @@ class SEResNet154Classifier(nn.Module):
             "features": features
 
         }
+
+class DualViewImageModel(nn.Module):
+
+
+    def __init__(self):
+
+        super().__init__()
+
+
+        self.frontal_model = SEResNet154Classifier()
+
+
+        self.lateral_model = SEResNet154Classifier()
+
+
+
+    def forward(
+            self,
+            frontal,
+            lateral
+    ):
+
+
+        frontal_output = self.frontal_model(
+            frontal
+        )
+
+
+        lateral_output = self.lateral_model(
+            lateral
+        )
+
+
+        features = torch.cat(
+            [
+                frontal_output["features"],
+                lateral_output["features"]
+            ],
+            dim=1
+        )
+
+
+        return {
+
+
+            "features": features,
+
+
+            "frontal_logits":
+                frontal_output["logits"],
+
+
+            "lateral_logits":
+                lateral_output["logits"]
+
+        }
