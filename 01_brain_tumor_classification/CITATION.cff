@@ -1,1 +1,48 @@
+message: "If you use this repository in your research, please cite it using the metadata below."
 
+title: "A Multi-Layered Defense Against Adversarial Attacks in Brain Tumor Classification: Implementation"
+
+type: software
+
+authors:
+  - family-names: "Akbarnia"
+    given-names: "Elahe"
+    email: "elahe.akbarnia.edu@gmail.com"
+
+abstract: >
+  This repository provides an implementation of a multi-layered adversarial
+  defense framework for brain tumor MRI classification. The implementation
+  includes VGG16 transfer learning, FGSM and PGD adversarial attacks,
+  feature squeezing defense, and adversarial training.
+
+keywords:
+  - "medical imaging"
+  - "brain tumor classification"
+  - "MRI"
+  - "adversarial attacks"
+  - "FGSM"
+  - "PGD"
+  - "feature squeezing"
+  - "deep learning"
+  - "medical AI"
+
+version: "1.0.0"
+
+date-released: "2026-09-04"
+
+license: "MIT"
+
+repository-code: "https://github.com/Elahe-Akbarnia/medical-ai-paper-reproduction"
+
+url: "https://github.com/Elahe-Akbarnia/medical-ai-paper-reproduction/tree/main/01_brain_tumor_classification"
+
+preferred-citation:
+  type: article
+  title: "A multi-layered defense against adversarial attacks in brain tumor classification using ensemble adversarial training and feature squeezing"
+  authors:
+    - family-names: "Yinusa"
+      given-names: "Ahmeed"
+    - family-names: "Faezipour"
+      given-names: "Misa"
+  journal: "Scientific Reports"
+  year: 2025
