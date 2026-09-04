@@ -1,0 +1,43 @@
+project:
+
+  name: brain_tumor_adversarial_defense
+
+  seed: 42
+
+
+dataset:
+
+  image_size:
+    height: 128
+    width: 128
+
+  channels: 3
+
+  classes:
+
+    - glioma
+    - meningioma
+    - pituitary
+    - no_tumor
+
+
+  validation_split: 0.2
+
+
+
+model:
+
+  backbone: VGG16
+
+  pretrained: imagenet
+
+  dropout: 0.5
+
+  classifier_units: 128
+
+
+optimizer:
+
+  name: Adam
+
+  learning_rate: 0.001
