@@ -1,8 +1,118 @@
+# Python
+
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python build files
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+
+# Jupyter Notebook
+
+.ipynb_checkpoints/
+
+
+# Operating System
+
+.DS_Store
+Thumbs.db
+
+
+# IDE / Editor
+
+.vscode/
+.idea/
+
+*.swp
+*.swo
+
+
 # Dataset
+
+# Original Kaggle dataset
 data/raw/
 
-# Generated processed data
+# Generated processed dataset
 data/processed/
 
-# Dataset split files (if generated)
+# Generated train/validation/test split files
 data/splits/
+
+
+# Model Checkpoints
+
+# Ignore all trained weights
+checkpoints/*
+
+# Keep folder visible on GitHub
+!checkpoints/.gitkeep
+!checkpoints/README.md
+
+
+# TensorFlow / Keras models
+*.h5
+*.keras
+*.weights
+*.ckpt
+
+
+# Training Logs
+
+logs/*
+
+!logs/.gitkeep
+!logs/README.md
+
+
+# TensorBoard
+tensorboard_logs/
+events.out.tfevents.*
+
+
+# Results
+
+# Ignore generated experiment outputs
+
+results/figures/*
+results/tables/*
+results/reports/*
+
+
+# Keep result structure visible
+
+!results/README.md
+
+!results/figures/.gitkeep
+!results/tables/.gitkeep
+!results/reports/.gitkeep
+
+
+# Experiment Outputs
+
+experiments/*
+
+!experiments/README.md
+
+
+# Temporary Files
+
+*.tmp
+*.temp
+*.cache
+
+*.log
+
+
+# Environment Files
+# Local environment variables
+.env
+.env.*
