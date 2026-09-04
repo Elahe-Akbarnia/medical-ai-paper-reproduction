@@ -1,1 +1,44 @@
+# Python
 
+__pycache__/
+
+*.pyc
+
+
+# Environment
+
+.env
+
+.venv/
+
+
+# Data
+
+data/raw/
+
+data/processed/
+
+
+# Models
+
+*.pt
+
+*.pth
+
+checkpoints/
+
+
+# Results
+
+results/logs/*
+
+results/figures/*
+
+results/tables/*
+
+results/predictions/*
+
+
+# Jupyter
+
+.ipynb_checkpoints/
