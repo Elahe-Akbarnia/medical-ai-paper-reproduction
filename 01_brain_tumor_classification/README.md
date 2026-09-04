@@ -9,7 +9,7 @@ Scientific Reports, 2025
 
 ## Overview
 
-This repository implements a robust deep learning framework for brain MRI tumor classification under adversarial attacks.
+This repository provides a complete implementation of the proposed methodology. Experimental validation requires a GPU-enabled environment.
 
 The framework combines:
 
@@ -22,6 +22,24 @@ The framework combines:
 
 The objective is improving robustness of medical AI systems against adversarial perturbations.
 
+
+---
+## Project Status
+
+Implementation status:
+
+- Dataset loading and preprocessing pipeline  
+- VGG16 transfer learning architecture  
+- FGSM attack implementation  
+- PGD attack implementation  
+- Feature squeezing defense  
+- Adversarial training pipeline  
+- Evaluation scripts  
+
+
+Note:
+
+Full experimental validation requires a GPU-enabled environment.
 
 ---
 
@@ -89,16 +107,35 @@ Total images:
 7023
 
 
-Images are resized to:
+Preprocessing:
 
-128 × 128
+- Resize images to 128 × 128 pixels
+- Normalize pixel values to the range [0,1]
+
+---
+
+## Dataset Download
+
+The dataset is not included in this repository due to size limitations.
+
+Please download the dataset from Kaggle and organize it as follows:
 
 
-Pixel values are normalized:
+```
+data/
 
-0-1
+└── raw/
 
+├── glioma/
 
+├── meningioma/
+
+├── pituitary/
+
+└── no_tumor/
+```
+
+The training scripts automatically load images from this directory.
 
 ---
 
@@ -217,8 +254,55 @@ Adversarial training uses:
 - FGSM images
 - PGD images
 
+---
+# Repository Structure
 
+```
+01_brain_tumor_classification/
 
+│
+├── README.md
+├── LICENSE
+├── CITATION.cff
+├── requirements.txt
+├── environment.yml
+├── .gitignore
+│
+├── configs/
+│   ├── config.yaml
+│   ├── training.yaml
+│   └── attacks.yaml
+│
+├── data/
+│   └── README.md
+│
+├── notebooks/
+│
+├── src/
+│   ├── data/
+│   ├── models/
+│   ├── attacks/
+│   ├── defenses/
+│   ├── evaluation/
+│   └── utils/
+│
+├── scripts/
+│   ├── train_baseline.py
+│   ├── train_defense.py
+│   ├── evaluate.py
+│   └── run_experiment.py
+│
+├── experiments/
+│   └── README.md
+│
+├── checkpoints/
+│   └── .gitkeep
+│
+└── results/
+    ├── figures/
+    ├── tables/
+    └── README.md
+```
 ---
 
 # Installation
