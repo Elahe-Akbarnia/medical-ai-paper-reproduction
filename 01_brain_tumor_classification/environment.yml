@@ -1,0 +1,24 @@
+name: brain-tumor-defense
+
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+
+  - python=3.9
+
+  - pip
+
+  - pip:
+      - tensorflow==2.11.0
+      - keras==2.11.0
+      - numpy==1.23.5
+      - pandas
+      - opencv-python
+      - scikit-learn
+      - matplotlib
+      - seaborn
+      - tqdm
+      - pyyaml
+      - pillow
