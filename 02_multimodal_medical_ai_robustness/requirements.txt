@@ -1,1 +1,44 @@
+# Deep Learning Framework
+torch==2.2.2
+torchvision==0.17.2
+torchaudio==2.2.2
 
+
+# Transformers
+transformers==4.40.1
+tokenizers==0.19.1
+
+
+# Medical / Computer Vision
+timm==0.9.16
+Pillow==10.3.0
+opencv-python==4.9.0.80
+
+
+# Data Processing
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+
+
+# NLP
+nltk==3.8.1
+textattack==0.3.10
+
+
+# Configuration
+PyYAML==6.0.1
+
+
+# Experiment Tracking
+tensorboard==2.16.2
+
+
+# Utilities
+tqdm==4.66.4
+matplotlib==3.8.4
+seaborn==0.13.2
+
+
+# Reproducibility
+python-dotenv==1.0.1
