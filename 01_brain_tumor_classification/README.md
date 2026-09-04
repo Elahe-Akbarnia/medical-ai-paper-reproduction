@@ -315,3 +315,12 @@ Clone repository:
 git clone https://github.com/Elahe-Akbarnia/medical-ai-paper-reproduction/tree/main/01_brain_tumor_classification
 
 cd brain-tumor-adversarial-defense
+
+```
+## Reproducibility Note
+
+This repository provides the complete implementation of the proposed methodology.
+
+Due to computational requirements, full experiments require a GPU-enabled environment.
+
+The reported results in the original publication are provided as reference values. Running the provided scripts will reproduce the experimental pipeline.
