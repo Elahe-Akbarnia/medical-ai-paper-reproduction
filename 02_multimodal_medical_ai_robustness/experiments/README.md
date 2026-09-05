@@ -1,115 +1,86 @@
-# Experiments
+# Dual-View Chest X-ray Image Baseline
 
 
-This directory organizes experiment configurations and generated experiment records.
+## Description
 
+This experiment reproduces the image classification component
+using frontal and lateral chest X-ray views.
 
-The implemented experiments correspond to the main components described in the paper.
 
+## Model
 
----
+Backbone:
 
-# Experiment Groups
+SE-ResNet152d pretrained on ImageNet
 
+Input:
 
-## 1. Vision Model
+- Frontal chest X-ray
+- Lateral chest X-ray
 
 
-Single-modality image classification using:
+Architecture:
 
-- SE-ResNet-154
-- Chest X-ray images
+Frontal image
+    |
+SE-ResNet backbone
+    |
+2048 features
 
 
-Configuration:
-configs/image_model.yaml
+Lateral image
+    |
+SE-ResNet backbone
+    |
+2048 features
 
 
----
+Feature concatenation
 
-## 2. Text Model
+4096-dimensional representation
 
+Binary classifier
 
-Single-modality text classification using:
 
-- Bio_ClinicalBERT
-- Clinical reports
+## Dataset
 
+Indiana University Chest X-ray Dataset
 
-Configuration:
-configs/text_model.yaml
 
+Training samples:
 
----
+2710
 
-## 3. Early Fusion
 
+Validation samples:
 
-Feature-level multimodal fusion.
+678
 
 
-Configuration:
-configs/early_fusion.yaml
+## Training Configuration
 
+Epochs:
 
----
+13
 
-## 4. Late Fusion
 
+Batch size:
 
-Decision-level multimodal fusion.
+128
 
 
-Configuration:
-configs/late_fusion.yaml
+Optimizer:
 
+Adam
 
----
 
-## 5. Adversarial Robustness Evaluation
+Learning rate:
 
+1e-4
 
-Experiments evaluating model performance under:
 
+## Notes
 
-Image attacks:
-
-- FGSM
-- PGD
-
-
-Text attacks:
-
-- Synonym replacement
-- Half-sentence deletion
-
-
-Configuration:
-configs/attacks.yaml
-
-
----
-
-# Experiment Outputs
-
-
-Generated outputs are stored in:
-
-```
-results/
-
-├── checkpoints/
-
-├── logs/
-
-├── figures/
-
-├── tables/
-
-└── predictions/
-```
-
-No experimental results are stored in this repository.
-
-
-
+This experiment represents the baseline reproduction.
+Further experiments will investigate multimodal fusion
+and robustness improvements.
