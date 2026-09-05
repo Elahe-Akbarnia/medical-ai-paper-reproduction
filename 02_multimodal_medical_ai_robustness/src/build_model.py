@@ -1,19 +1,24 @@
+
 from models.image_model import (
-    SEResNet154Classifier,
+    SEResNet152Classifier,
     DualViewImageModel
 )
+
 
 from models.text_model import (
     BioClinicalBERTClassifier
 )
 
+
 from models.early_fusion import (
     VisionBERTEarlyFusion
 )
 
+
 from models.late_fusion import (
     VisionBERTLateFusion
 )
+
 
 from models.ensemble_fusion import (
     VisionBERTEnsembleFusion
@@ -24,24 +29,23 @@ from models.ensemble_fusion import (
 def build_model(name):
 
 
-    if name=="image":
+    if name == "image":
 
         return DualViewImageModel()
 
 
 
-    elif name=="text":
+    elif name == "text":
 
         return BioClinicalBERTClassifier()
 
 
 
-    elif name=="early_fusion":
+    elif name == "early_fusion":
 
+        image_model = DualViewImageModel()
 
-        image_model=DualViewImageModel()
-
-        text_model=BioClinicalBERTClassifier()
+        text_model = BioClinicalBERTClassifier()
 
 
         return VisionBERTEarlyFusion(
@@ -54,12 +58,11 @@ def build_model(name):
 
 
 
-    elif name=="late_fusion":
+    elif name == "late_fusion":
 
+        image_model = DualViewImageModel()
 
-        image_model=DualViewImageModel()
-
-        text_model=BioClinicalBERTClassifier()
+        text_model = BioClinicalBERTClassifier()
 
 
         return VisionBERTLateFusion(
@@ -72,8 +75,7 @@ def build_model(name):
 
 
 
-    elif name=="ensemble":
-
+    elif name == "ensemble":
 
         return VisionBERTEnsembleFusion(
 
