@@ -27,18 +27,114 @@ class Trainer:
             logger=None
     ):
 
+        self.model = model
 
-        self.model=model
+        self.optimizer = optimizer
 
-        self.optimizer=optimizer
+        self.scheduler = scheduler
 
-        self.scheduler=scheduler
+        self.criterion = criterion
 
-        self.criterion=criterion
+        self.device = device
 
-        self.device=device
+        self.logger = logger
 
-        self.logger=logger
+
+
+    def compute_loss(
+            self,
+            outputs,
+            labels
+    ):
+
+
+        # Text and fusion models
+
+        if "logits" in outputs:
+
+            return self.criterion(
+
+                outputs["logits"].squeeze(),
+
+                labels
+
+            )
+
+
+        # Dual-view image model
+
+        elif "frontal_logits" in outputs:
+
+
+            frontal_loss = self.criterion(
+
+                outputs["frontal_logits"].squeeze(),
+
+                labels
+
+            )
+
+
+            lateral_loss = self.criterion(
+
+                outputs["lateral_logits"].squeeze(),
+
+                labels
+
+            )
+
+
+            return (
+                frontal_loss +
+                lateral_loss
+            ) / 2
+
+
+        else:
+
+            raise ValueError(
+                "Unknown model output format"
+            )
+
+
+
+    def get_probability(
+            self,
+            outputs
+    ):
+
+
+        if "logits" in outputs:
+
+            return torch.sigmoid(
+                outputs["logits"]
+            )
+
+
+        elif "frontal_logits" in outputs:
+
+
+            logits = (
+
+                outputs["frontal_logits"]
+
+                +
+
+                outputs["lateral_logits"]
+
+            ) / 2
+
+
+            return torch.sigmoid(
+                logits
+            )
+
+
+        else:
+
+            raise ValueError(
+                "Unknown model output format"
+            )
 
 
 
@@ -51,14 +147,14 @@ class Trainer:
         self.model.train()
 
 
-        total_loss=0
+        total_loss = 0
 
 
-        targets=[]
+        targets = []
 
-        predictions=[]
+        predictions = []
 
-        probabilities=[]
+        probabilities = []
 
 
 
@@ -71,26 +167,20 @@ class Trainer:
             self.optimizer.zero_grad()
 
 
-
-            outputs=self.forward_batch(
+            outputs = self.forward_batch(
                 batch
             )
 
 
-            logits=outputs["logits"]
-
-
-
-            loss=self.criterion(
-
-                logits.squeeze(),
-
-                batch["label"].to(
-                    self.device
-                )
-
+            labels = batch["label"].to(
+                self.device
             )
 
+
+            loss = self.compute_loss(
+                outputs,
+                labels
+            )
 
 
             loss.backward()
@@ -99,21 +189,23 @@ class Trainer:
             self.optimizer.step()
 
 
-
             total_loss += loss.item()
 
 
 
-            probs=torch.sigmoid(
-                logits
+            probs = self.get_probability(
+                outputs
             )
 
-            preds=(probs>0.5).int()
+
+            preds = (
+                probs > 0.5
+            ).int()
 
 
 
             targets.extend(
-                batch["label"].cpu().numpy()
+                labels.cpu().numpy()
             )
 
 
@@ -128,7 +220,7 @@ class Trainer:
 
 
 
-        metrics=calculate_metrics(
+        metrics = calculate_metrics(
 
             targets,
 
@@ -139,9 +231,11 @@ class Trainer:
         )
 
 
-        metrics["loss"]=(
+        metrics["loss"] = (
+
             total_loss /
             len(dataloader)
+
         )
 
 
@@ -158,14 +252,14 @@ class Trainer:
         self.model.eval()
 
 
-        targets=[]
+        targets = []
 
-        predictions=[]
+        predictions = []
 
-        probabilities=[]
+        probabilities = []
 
 
-        total_loss=0
+        total_loss = 0
 
 
 
@@ -175,41 +269,41 @@ class Trainer:
             for batch in dataloader:
 
 
-                outputs=self.forward_batch(
+                outputs = self.forward_batch(
                     batch
                 )
 
 
-                logits=outputs["logits"]
-
-
-
-                loss=self.criterion(
-
-                    logits.squeeze(),
-
-                    batch["label"].to(
-                        self.device
-                    )
-
-                )
-
-                total_loss+=loss.item()
-
-
-
-                probs=torch.sigmoid(
-                    logits
+                labels = batch["label"].to(
+                    self.device
                 )
 
 
-                preds=(probs>0.5).int()
+                loss = self.compute_loss(
+                    outputs,
+                    labels
+                )
+
+
+                total_loss += loss.item()
+
+
+
+                probs = self.get_probability(
+                    outputs
+                )
+
+
+                preds = (
+                    probs > 0.5
+                ).int()
 
 
 
                 targets.extend(
-                    batch["label"].cpu().numpy()
+                    labels.cpu().numpy()
                 )
+
 
                 predictions.extend(
                     preds.cpu().numpy()
@@ -222,7 +316,7 @@ class Trainer:
 
 
 
-        metrics=calculate_metrics(
+        metrics = calculate_metrics(
 
             targets,
 
@@ -233,9 +327,11 @@ class Trainer:
         )
 
 
-        metrics["loss"]=(
+        metrics["loss"] = (
+
             total_loss /
             len(dataloader)
+
         )
 
 
@@ -252,22 +348,21 @@ class Trainer:
     ):
 
 
-        best_f1=0
+        best_f1 = 0
 
 
 
         for epoch in range(epochs):
 
 
-            train_metrics=self.train_epoch(
+            train_metrics = self.train_epoch(
                 train_loader
             )
 
 
-            val_metrics=self.validate(
+            val_metrics = self.validate(
                 val_loader
             )
-
 
 
             if self.scheduler:
@@ -278,11 +373,9 @@ class Trainer:
 
 
 
-            if self.logger:
-
-                self.logger.info(
-                    f"""
-Epoch {epoch}
+            print(
+                f"""
+Epoch {epoch+1}
 
 Train:
 {train_metrics}
@@ -290,33 +383,26 @@ Train:
 Validation:
 {val_metrics}
 """
-                )
-
+            )
 
 
             if val_metrics["f1"] > best_f1:
 
 
-                best_f1=val_metrics["f1"]
-
+                best_f1 = val_metrics["f1"]
 
 
                 save_checkpoint(
 
                     {
 
-                    "epoch":epoch,
+                    "epoch": epoch,
 
                     "model_state_dict":
                     self.model.state_dict(),
 
                     "optimizer_state_dict":
                     self.optimizer.state_dict(),
-
-                    "scheduler_state_dict":
-                    self.scheduler.state_dict()
-                    if self.scheduler
-                    else None,
 
                     "best_metric":
                     best_f1
@@ -336,10 +422,6 @@ Validation:
             batch
     ):
 
-        """
-        Handles different model inputs.
-        """
-
 
         if "frontal" in batch:
 
@@ -352,10 +434,9 @@ Validation:
 
                 batch["lateral"].to(
                     self.device
-                ),
+                )
 
             )
-
 
 
         elif "input_ids" in batch:
