@@ -1,0 +1,2 @@
+experiment,model,dataset,accuracy,f1,auc,precision,recall
+image_baseline,SE-ResNet152d,Indiana University Chest X-ray,0.7109,0.7888,0.7618,0.7231,0.8764
