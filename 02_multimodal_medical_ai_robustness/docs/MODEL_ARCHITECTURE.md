@@ -3,8 +3,9 @@
 
 This document describes the architecture of the implemented multimodal medical AI framework.
 
+The framework is designed for chest X-ray classification using image and clinical text modalities.
 
-The framework consists of:
+The repository includes:
 
 - Image modality encoder
 - Text modality encoder
@@ -33,7 +34,7 @@ Feature Extraction
 
 ↓
 
-Multimodal Fusion
+(Optional) Multimodal Fusion
 
 ↓
 
@@ -50,34 +51,58 @@ Binary Classification
 
 ## Backbone
 
-SE-ResNet-154 pretrained model
+
+The image encoder uses a pretrained Squeeze-and-Excitation ResNet architecture.
+
+Implementation:
+
+SE-ResNet152d pretrained on ImageNet
 
 
-The image model processes two chest X-ray views:
+Note:
+
+The original methodology uses SE-ResNet154.
+Due to pretrained checkpoint availability,
+this implementation uses SE-ResNet152d as the available equivalent SE-ResNet backbone.
+
+
+
+---
+
+# Dual-View Image Processing
+
+
+The model processes two chest X-ray views:
 
 - Frontal view
 - Lateral view
 
 
-Each image is passed through an independent SE-ResNet-154 feature extractor.
+Each view is passed through an independent image encoder.
+
 
 
 Architecture:
+
+
+
 Frontal X-ray
 
 ↓
 
-SE-ResNet-154
+SE-ResNet152d
 
 ↓
 
 2048-dimensional feature vector
+
+
 
 Lateral X-ray
 
 ↓
 
-SE-ResNet-154
+SE-ResNet152d
 
 ↓
 
@@ -85,10 +110,56 @@ SE-ResNet-154
 
 
 
-The extracted image features are used for:
+The two feature vectors are concatenated:
+
+
+2048 + 2048
+
+=
+
+4096-dimensional image representation
+
+
+
+The image representation is used for:
 
 - Image-only classification
-- Multimodal fusion
+- Multimodal fusion experiments
+
+
+
+---
+
+# Image Classification Head
+
+
+The image classifier receives the fused dual-view representation.
+
+
+Pipeline:
+
+
+Frontal Features
+
++
+
+Lateral Features
+
+↓
+
+Feature Concatenation
+
+↓
+
+Fully Connected Layer
+
+↓
+
+Binary Classification
+
+↓
+
+Normal / Abnormal
 
 
 
@@ -99,13 +170,16 @@ The extracted image features are used for:
 
 ## Backbone
 
-Bio_ClinicalBERT
+
+BioClinicalBERT
 
 
-The text model processes clinical reports associated with chest X-ray images.
+The text encoder processes clinical reports associated with chest X-ray images.
 
 
 Architecture:
+
+
 
 Clinical Report
 
@@ -115,19 +189,19 @@ Tokenizer
 
 ↓
 
-Bio_ClinicalBERT
+BioClinicalBERT
 
 ↓
 
-CLS representation
+CLS Representation
 
 ↓
 
-Classification layer
+Classification Layer
 
 
 
-The CLS representation is used as the text feature representation.
+The CLS token representation is used as the text feature representation.
 
 
 Feature dimension:
@@ -142,43 +216,60 @@ Feature dimension:
 # Multimodal Fusion
 
 
-The repository implements three fusion strategies.
+The repository implements multiple fusion strategies for combining image and text information.
+
+
+These modules are implemented for future multimodal experiments.
+
 
 
 ---
 
-## Early Fusion
+# Early Fusion
 
 
-Early fusion combines modality features before classification.
+Early fusion combines image and text representations before classification.
 
 
 Feature representation:
 
 
 
-Frontal image features
+Image Features
 
-Lateral image features
+(4096 dimensions)
 
-Text features
+
++
+
+Text Features
+
+(768 dimensions)
+
 
 =
 
-4864-dimensional vector
+4864-dimensional multimodal representation
 
-
-
-The fused representation is passed through a classification head.
 
 
 Pipeline:
 
 
 
+Image Encoder
+
+↓
+
 Image Features
 
+
+Text Encoder
+
+↓
+
 Text Features
+
 
 ↓
 
@@ -186,7 +277,7 @@ Feature Concatenation
 
 ↓
 
-Linear Classifier
+Classification Head
 
 ↓
 
@@ -196,10 +287,10 @@ Prediction
 
 ---
 
-## Late Fusion
+# Late Fusion
 
 
-Late fusion combines predictions from separately trained modality models.
+Late fusion combines predictions from independently trained modality models.
 
 
 Training procedure:
@@ -212,7 +303,8 @@ Train image and text models independently.
 
 Stage 2:
 
-Freeze modality models and train the fusion classifier.
+Combine modality predictions using a fusion classifier.
+
 
 
 Pipeline:
@@ -225,28 +317,32 @@ Image Model
 
 Image Prediction
 
+
+
 Text Model
 
 ↓
 
 Text Prediction
 
-↓
 
-Fusion Classifier
 
 ↓
 
-Prediction
+Fusion Layer
+
+↓
+
+Final Prediction
 
 
 
 ---
 
-## Ensemble Fusion
+# Ensemble Fusion
 
 
-Ensemble fusion combines modality outputs without an additional fusion classifier.
+Ensemble fusion combines modality outputs directly.
 
 
 Pipeline:
@@ -254,6 +350,8 @@ Pipeline:
 
 
 Image Logits
+
++
 
 Text Logits
 
@@ -265,21 +363,63 @@ Final Prediction
 
 ---
 
-# Adversarial Attack Integration
+# Current Evaluated Experiment
 
 
-The framework evaluates model robustness by applying attacks to different modalities.
+The first completed experiment evaluates the image-only baseline.
+
+
+Configuration:
+
+
+Input:
+
+- Frontal chest X-ray
+- Lateral chest X-ray
+
+
+Backbone:
+
+- Dual-view SE-ResNet152d
+
+
+Task:
+
+Binary classification
+
+
+Classes:
+
+- Normal
+- Abnormal
+
+
+Dataset:
+
+Indiana University Chest X-ray Dataset
+
+
+
+---
+
+# Adversarial Robustness Extension
+
+
+The repository structure includes adversarial robustness modules.
+
+Planned evaluations include:
 
 
 ## Image Attacks
 
-Implemented:
+
+Methods:
 
 - FGSM
 - PGD
 
 
-Attack target:
+Target:
 
 Chest X-ray images
 
@@ -287,13 +427,14 @@ Chest X-ray images
 
 ## Text Attacks
 
-Implemented:
+
+Methods:
 
 - Synonym replacement
-- Half-sentence deletion
+- Sentence deletion
 
 
-Attack target:
+Target:
 
 Clinical text reports
 
@@ -304,7 +445,7 @@ Clinical text reports
 # Evaluation Pipeline
 
 
-Each experiment evaluates:
+Experiments evaluate:
 
 
 - Clean samples
@@ -315,8 +456,31 @@ Each experiment evaluates:
 
 Metrics:
 
+
 - Accuracy
 - F1-score
 - Precision
 - Recall
 - ROC-AUC
+
+
+
+---
+
+# Implementation Status
+
+
+Implemented:
+
+- Dual-view chest X-ray processing
+- SE-ResNet image encoder
+- Binary image classification pipeline
+- Dataset preparation
+- Training and validation pipeline
+
+
+Implemented but not yet fully evaluated:
+
+- BioClinicalBERT text encoder
+- Multimodal fusion strategies
+- Adversarial robustness experiments
