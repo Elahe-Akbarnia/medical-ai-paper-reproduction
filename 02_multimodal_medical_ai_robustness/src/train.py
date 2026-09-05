@@ -11,21 +11,21 @@ from utils.config import Config
 
 from utils.seed import set_seed
 
-from utils.logger import create_logger
-
-
 from losses.classification_loss import get_loss
 
 from engine.trainer import Trainer
 
-
 from src.build_model import build_model
 
+from src.build_dataset import (
+    prepare_dataframe,
+    build_image_loaders
+)
 
 
 def main():
 
-    parser=argparse.ArgumentParser()
+    parser = argparse.ArgumentParser()
 
 
     parser.add_argument(
@@ -40,14 +40,31 @@ def main():
     )
 
 
-    args=parser.parse_args()
-
-
-
-    cfg=Config(
-        args.config
+    parser.add_argument(
+        "--reports",
+        required=True
     )
 
+
+    parser.add_argument(
+        "--projections",
+        required=True
+    )
+
+
+    parser.add_argument(
+        "--images",
+        required=True
+    )
+
+
+    args = parser.parse_args()
+
+
+
+    cfg = Config(
+        args.config
+    )
 
 
     set_seed(
@@ -58,51 +75,116 @@ def main():
     )
 
 
-    device="cuda" if torch.cuda.is_available() else "cpu"
+    device = (
+        "cuda"
+        if torch.cuda.is_available()
+        else "cpu"
+    )
 
-
-
-    model=build_model(
-        args.model
+    print(
+        "Device:",
+        device
     )
 
 
-    model=model.to(device)
+
+    # -----------------------
+    # Dataset
+    # -----------------------
+
+    dataframe = prepare_dataframe(
+
+        args.reports,
+
+        args.projections,
+
+        args.images
+
+    )
+
+
+    print(
+        "Samples:",
+        len(dataframe)
+    )
 
 
 
-    optimizer=Adam(
+    train_loader, val_loader = build_image_loaders(
 
-        model.parameters(),
+        dataframe,
 
-        lr=cfg.get(
-            "training.learning_rate"
+        image_size=cfg.get(
+            "data.image_size",
+            224
+        ),
+
+        batch_size=cfg.get(
+            "training.batch_size",
+            8
         )
 
     )
 
 
-    scheduler=ReduceLROnPlateau(
+
+    print(
+        "Train batches:",
+        len(train_loader)
+    )
+
+    print(
+        "Validation batches:",
+        len(val_loader)
+    )
+
+
+
+    # -----------------------
+    # Model
+    # -----------------------
+
+    model = build_model(
+        args.model
+    )
+
+
+    model = model.to(
+        device
+    )
+
+
+
+    # -----------------------
+    # Optimization
+    # -----------------------
+
+    optimizer = Adam(
+
+        model.parameters(),
+
+        lr=cfg.get(
+            "training.learning_rate",
+            0.0001
+        )
+
+    )
+
+
+    scheduler = ReduceLROnPlateau(
         optimizer
     )
 
 
-
-    criterion=get_loss()
-
-
-
-    logger=create_logger(
-
-        args.model,
-
-        f"results/logs/{args.model}.log"
-
-    )
+    criterion = get_loss()
 
 
 
-    trainer=Trainer(
+    # -----------------------
+    # Training
+    # -----------------------
+
+    trainer = Trainer(
 
         model,
 
@@ -112,18 +194,28 @@ def main():
 
         criterion,
 
-        device,
-
-        logger
+        device
 
     )
 
 
-    print(
-        "Training pipeline ready"
+    trainer.fit(
+
+        train_loader,
+
+        val_loader,
+
+        cfg.get(
+            "training.epochs",
+            13
+        ),
+
+        "checkpoints"
+
     )
 
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
 
     main()
