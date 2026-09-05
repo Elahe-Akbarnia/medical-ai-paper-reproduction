@@ -1,12 +1,10 @@
+
 experiment:
-  name: se_resnet154_xray_baseline
+  name: seresnet152d_xray
   seed: 42
 
 
 data:
-
-  dataset: indiana_university_chest_xray
-
   train_split: 0.8
 
   image_size: 224
@@ -24,7 +22,7 @@ data:
 
 model:
 
-  architecture: se_resnet154
+  architecture: seresnet152d.ra2_in1k
 
   pretrained: true
 
@@ -35,7 +33,7 @@ training:
 
   epochs: 13
 
-  batch_size: 128
+  batch_size: 8
 
   optimizer: Adam
 
